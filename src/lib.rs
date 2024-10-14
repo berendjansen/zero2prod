@@ -1,7 +1,7 @@
-use actix_web::{web, App, HttpServer, HttpResponse};
 use actix_web::dev::Server;
-use std::net::TcpListener;
+use actix_web::{web, App, HttpResponse, HttpServer};
 use serde::Deserialize;
+use std::net::TcpListener;
 
 async fn health_check() -> HttpResponse {
     HttpResponse::Ok().finish()
@@ -24,7 +24,7 @@ pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscribe))
     })
-        .listen(listener)?
-        .run();
-    Ok(server)  
+    .listen(listener)?
+    .run();
+    Ok(server)
 }
