@@ -15,9 +15,10 @@ name = "zero2prod"
 
 [dependencies]
 actix-web = "4"
+claims = "0.7"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serde = { version = "1.0", features = ["derive"] }
-config = { git = "https://github.com/mehcode/config-rs", branch = "master" }
+config = { git = "https://github.com/mehcode/config-rs", branch = "main" }
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
 tracing = { version = "0.1", features = ["log"] }
@@ -27,6 +28,12 @@ tracing-log = "0.2"
 tracing-actix-web = "0.7"
 secrecy = { version = "0.8", features = ["serde"] }
 serde-aux = "4"
+unicode-segmentation = "1"
+validator = "0.18"
+fake = "2.10.0"
+quickcheck = "1.0.3"
+quickcheck_macros = "1.0.0"
+rand = "0.8"
 
 
 [dependencies.sqlx]
