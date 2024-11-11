@@ -1,6 +1,7 @@
 use crate::domain::SubscriberEmail;
 use reqwest::{Client, Url};
 use secrecy::{ExposeSecret, Secret};
+use url::ParseError;
 
 pub struct EmailClient {
     sender: SubscriberEmail,
@@ -16,16 +17,27 @@ impl EmailClient {
         authorization_token: Secret<String>,
         timeout: std::time::Duration,
     ) -> Result<EmailClient, String> {
-        let http_client = Client::builder().timeout(timeout).build().unwrap();
+        let http_client = Client::builder()
+            .timeout(timeout)
+            .build()
+            .map_err(|e| format!("Failed to build HTTP Client: {}", e))?;
 
-        Url::parse(&base_url)
-            .map_err(|e| format!("Invalid base_url: {}, error: {}", base_url, e))
-            .map(|url| EmailClient {
-                base_url: url,
-                sender,
-                http_client,
-                authorization_token,
+        let base_url = Url::parse(&base_url)
+            .or_else(|e| {
+                if e == ParseError::RelativeUrlWithoutBase {
+                    Url::parse(&format!("https://{}", base_url))
+                } else {
+                    Err(e)
+                }
             })
+            .map_err(|e| format!("Invalid base_url: {}, error: {}", base_url, e))?;
+
+        Ok(EmailClient {
+            base_url,
+            sender,
+            http_client,
+            authorization_token,
+        })
     }
 
     pub async fn send_email(
