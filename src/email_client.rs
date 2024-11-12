@@ -3,6 +3,7 @@ use reqwest::{Client, Url};
 use secrecy::{ExposeSecret, Secret};
 use url::ParseError;
 
+#[derive(Debug)]
 pub struct EmailClient {
     sender: SubscriberEmail,
     http_client: Client,
@@ -51,6 +52,7 @@ impl EmailClient {
             .base_url
             .join("/email")
             .expect("Could not construct url from base_url.");
+
         let request_body = SendEmailRequest {
             from: self.sender.as_ref(),
             to: recipient.as_ref(),
