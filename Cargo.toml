@@ -35,6 +35,8 @@ quickcheck = "1.0.3"
 quickcheck_macros = "1.0.0"
 url = "2.5.2"
 rand = { version = "0.8", features = ["std_rng"] }
+thiserror = "1"
+anyhow = "1"
 
 
 [dependencies.sqlx]
